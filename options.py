@@ -284,8 +284,8 @@ class Options(QtWidgets.QWidget):
         self.tabs.addTab(audio_tab, "Audio")
         self.tabs.addTab(advanced_tab, "Advanced")
 
-        save_layout.addWidget(savebutton, alignment=QtCore.Qt.AlignRight)
-        save_layout.addWidget(cancelbutton, alignment=QtCore.Qt.AlignRight)
+        save_layout.addWidget(savebutton, 100, alignment=QtCore.Qt.AlignRight)
+        save_layout.addWidget(cancelbutton, 0, alignment=QtCore.Qt.AlignRight)
         main_layout.addWidget(self.tabs)
         main_layout.addLayout(save_layout)
 
@@ -303,14 +303,14 @@ class Options(QtWidgets.QWidget):
         pass
 
     def eventFilter(self, source, event):
-        if self.tabs.currentIndex() == 2 and self.changingBind and event.type() == QtCore.QEvent.KeyPress:
+        if self.tabs.currentIndex() == 2 and self.changing_bind and event.type() == QtCore.QEvent.KeyPress:
             key = event.key()
             if key != QtCore.Qt.Key_Escape:
-                self.ao_app.controls[self.changingBind[1]][self.changingBind[2]] = key
-                self.changingBind[0].setText(getControlName(key))
+                self.ao_app.controls[self.changing_bind[1]][self.changing_bind[2]] = key
+                self.changing_bind[0].setText(getControlName(key))
             else:
-                self.changingBind[0].setText(getControlName(self.ao_app.controls[self.changingBind[1]][self.changingBind[2]]))
-            self.changingBind = []
+                self.changing_bind[0].setText(getControlName(self.ao_app.controls[self.changing_bind[1]][self.changing_bind[2]]))
+            self.changing_bind = []
             return True
         return super(Options, self).eventFilter(source, event)
 

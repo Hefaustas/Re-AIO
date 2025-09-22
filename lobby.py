@@ -2,6 +2,8 @@ from PySide6 import QtWidgets
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
+from game_version import LOBBY_VERSION
+
 import options
 
 
@@ -28,6 +30,9 @@ class lobby(QtWidgets.QWidget):
             name = w.objectName()
             if name:
                 setattr(self, name, w)
+
+        if hasattr(self.ui, "versiontext"):
+            self.ui.versiontext.setText(f"Re: Attorney Investigations Online\nv{LOBBY_VERSION}")
 
         if hasattr(self.ui, "settingsbutton"):
             self.ui.settingsbutton.clicked.connect(self.on_settings_button)
