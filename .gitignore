@@ -1,5 +1,5 @@
 .venv/
 .__pycache__/
 *.pyc
-.bass.dll
-.bassopus.dll
+bass.dll
+bassopus.dll
