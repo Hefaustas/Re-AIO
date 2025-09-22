@@ -78,7 +78,7 @@
    <property name="font">
     <font>
      <family>Segoe UI</family>
-     <pointsize>13</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
    <property name="text">
@@ -86,7 +86,7 @@
 Version number</string>
    </property>
   </widget>
-  <widget class="QFrame" name="frame">
+  <widget class="QFrame" name="serverdescription">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -102,7 +102,7 @@ Version number</string>
     <enum>QFrame::Shadow::Raised</enum>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="aboutbutton">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -115,7 +115,7 @@ Version number</string>
     <string>About</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="settingsbutton">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -128,7 +128,7 @@ Version number</string>
     <string>Settings</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="refreshbutton">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -141,7 +141,7 @@ Version number</string>
     <string>Refresh</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="connect">
+  <widget class="QPushButton" name="connectbutton">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -154,7 +154,7 @@ Version number</string>
     <string>Connect</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="favoritebutton">
    <property name="geometry">
     <rect>
      <x>90</x>
@@ -167,7 +167,7 @@ Version number</string>
     <string>Favorite</string>
    </property>
   </widget>
-  <widget class="QFrame" name="frame_2">
+  <widget class="QFrame" name="servername">
    <property name="geometry">
     <rect>
      <x>10</x>
