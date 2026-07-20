@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>lobbywidget</class>
- <widget class="QWidget" name="lobbywidget">
+ <class>lobbyWidget</class>
+ <widget class="QWidget" name="lobbyWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -24,49 +24,120 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTreeWidget" name="serverlistwidget">
+  <widget class="QTabWidget" name="serverTabs">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>70</y>
      <width>491</width>
      <height>211</height>
     </rect>
    </property>
-   <property name="indentation">
+   <property name="currentIndex">
     <number>0</number>
    </property>
-   <property name="sortingEnabled">
-    <bool>true</bool>
-   </property>
-   <property name="animated">
-    <bool>true</bool>
-   </property>
-   <property name="columnCount">
-    <number>4</number>
-   </property>
-   <column>
-    <property name="text">
-     <string notr="true">1</string>
+   <widget class="QWidget" name="publicTab">
+    <property name="toolTip">
+     <string>Displays servers published on the masterserver.</string>
     </property>
-   </column>
-   <column>
-    <property name="text">
-     <string notr="true">2</string>
+    <attribute name="title">
+     <string>Public</string>
+    </attribute>
+    <widget class="QTreeWidget" name="publicServerList">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>481</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="animated">
+      <bool>true</bool>
+     </property>
+     <property name="columnCount">
+      <number>4</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Server</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Players</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Ping</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="favoritesTab">
+    <property name="toolTip">
+     <string>Displays favorite servers.</string>
     </property>
-   </column>
-   <column>
-    <property name="text">
-     <string notr="true">3</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string notr="true">4</string>
-    </property>
-   </column>
+    <attribute name="title">
+     <string>Favorites</string>
+    </attribute>
+    <widget class="QTreeWidget" name="favoritesServerList">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>481</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="animated">
+      <bool>true</bool>
+     </property>
+     <property name="columnCount">
+      <number>4</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Server</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Players</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Ping</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Version</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
   </widget>
-  <widget class="QLabel" name="versiontext">
+  <widget class="QLabel" name="versionText">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -86,7 +157,7 @@
 Version number</string>
    </property>
   </widget>
-  <widget class="QFrame" name="serverdescription">
+  <widget class="QFrame" name="serverDescription">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -102,7 +173,7 @@ Version number</string>
     <enum>QFrame::Shadow::Raised</enum>
    </property>
   </widget>
-  <widget class="QPushButton" name="aboutbutton">
+  <widget class="QPushButton" name="aboutButton">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -111,11 +182,14 @@ Version number</string>
      <height>24</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>About the application.</string>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="settingsbutton">
+  <widget class="QPushButton" name="settingsButton">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -124,55 +198,73 @@ Version number</string>
      <height>24</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Configure your Re:AIO client.</string>
+   </property>
    <property name="text">
     <string>Settings</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="refreshbutton">
+  <widget class="QPushButton" name="refreshButton">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>290</y>
      <width>71</width>
      <height>24</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Refresh the serverlist.</string>
    </property>
    <property name="text">
     <string>Refresh</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="connectbutton">
+  <widget class="QPushButton" name="connectButton">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>400</x>
      <y>490</y>
-     <width>71</width>
-     <height>24</height>
+     <width>101</width>
+     <height>51</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI Emoji</family>
+     <pointsize>25</pointsize>
+    </font>
+   </property>
+   <property name="toolTip">
+    <string>Connect to the selected server.</string>
+   </property>
    <property name="text">
-    <string>Connect</string>
+    <string>▷</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="favoritebutton">
+  <widget class="QPushButton" name="favoriteButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>200</x>
      <y>490</y>
-     <width>71</width>
-     <height>24</height>
+     <width>191</width>
+     <height>51</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Add selected server to favorites. </string>
+   </property>
    <property name="text">
-    <string>Favorite</string>
+    <string>Add to favorites</string>
    </property>
   </widget>
-  <widget class="QFrame" name="servername">
+  <widget class="QFrame" name="serverName">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>330</y>
-     <width>491</width>
+     <width>391</width>
      <height>21</height>
     </rect>
    </property>
@@ -181,6 +273,64 @@ Version number</string>
    </property>
    <property name="frameShadow">
     <enum>QFrame::Shadow::Raised</enum>
+   </property>
+  </widget>
+  <widget class="QFrame" name="serverPlayercount">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>330</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Raised</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="directConnectButton">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>290</y>
+     <width>91</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Join an IP address or URL directly. </string>
+   </property>
+   <property name="text">
+    <string>Direct connect</string>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>540</y>
+     <width>501</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>491</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
  </widget>

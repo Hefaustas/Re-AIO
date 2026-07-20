@@ -8,8 +8,6 @@ class Application(QApplication):
 
     def __init__(self, argv=[]):
         super().__init__(argv)
-        self.main_window = MainWindow(self)
-        self.main_window.show()
         self.controls = {
             "up": [QtCore.Qt.Key_W, QtCore.Qt.Key_Up],
             "down": [QtCore.Qt.Key_S, QtCore.Qt.Key_Down],
@@ -18,8 +16,13 @@ class Application(QApplication):
             "run": [QtCore.Qt.Key_Shift, -1],
         }
 
+        self.main_window = MainWindow(self)
+        self.main_window.show()
+        
+
 class ClientThread:
     pass
+
 
 class UDPThread:
     pass

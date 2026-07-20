@@ -7,6 +7,7 @@ from configparser import ConfigParser
 dll = None
 dllf = ""
 opus = ""
+use_pybass3 = False
 use_ctypes = False
 if platform.system() == "Windows":
     dllf = "bass.dll"
@@ -33,18 +34,25 @@ def init(freq=48000):
     """
 Initialize BASS and the opus plugin
     """
-    global dll, use_ctypes
+    global dll, use_ctypes, use_pybass3
     if not dll:
         if platform.system() == "Darwin":
             dll = ctypes.CDLL(dllf)
             use_ctypes = True
         else:
             import pybass3 as dll
+            use_pybass3 = True
 
     config = ConfigParser()
     config.read("re-aio.ini")
-    dll.BASS_Init(config.getint("Audio", "device", -1), freq, 0, 0, 0)
-    dll.BASS_PluginLoad(os.path.abspath(opus), 0)
+
+    if use_pybass3:
+        dll.bass_module.BASS_Init(config.getint("Audio", "device", fallback=-1), freq, 0, 0, 0)
+        #dll.bass_stream.BASS_PluginLoad(os.path.abspath(opus), 0)
+    else:    
+        dll.BASS_Init(config.getint("Audio", "device", fallback=-1), freq, 0, 0, 0)
+        dll.BASS_PluginLoad(os.path.abspath(opus), 0)
+    
 
 def free():
     """

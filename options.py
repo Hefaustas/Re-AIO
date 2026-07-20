@@ -60,8 +60,7 @@ class HTMLDelegate(QtWidgets.QStyledItemDelegate):
 
 
 class Options(QtWidgets.QWidget):
-    # python3 equivalent for fileSaved = QtCore.pyqtSignal()
-    #fileSaved = signal()
+    fileSaved = QtCore.Signal()
 
     def __init__(self, ao_app):
         super().__init__()
@@ -153,6 +152,7 @@ class Options(QtWidgets.QWidget):
             text = f"<b>{themename}</b><br><i>by {themeauthor}</i><br>{themedesc}"
 
             item = QtWidgets.QListWidgetItem(QtGui.QIcon(thumbnail), text)
+            item.setToolTip(themedesc)
             self.themes.append((theme, item))
             self.themeview.addItem(item)
 
@@ -194,8 +194,8 @@ class Options(QtWidgets.QWidget):
         self.run_button.clicked.connect(partial(self.change_bind, self.run_button, "run", 0))
 
 
-        if os.path.exists("aaio.ini"):
-            self.inifile.read("aaio.ini")
+        if os.path.exists("re-aio.ini"):
+            self.inifile.read("re-aio.ini")
             for i in range(len(self.up_buttons)):
                 ao_app.controls["up"][i] = self.inifile.getint("Controls", f"up{i+1}", fallback=ao_app.controls["up"][i])
             for i in range(len(self.down_buttons)):
@@ -252,10 +252,11 @@ class Options(QtWidgets.QWidget):
         audio_layout.addRow(music_label, self.music_slider)
         audio_layout.addRow(blips_label, self.blips_slider)
 
-        # your audio.getdevices() returns a list of names (or (id,name) tuples)
         try:
             devices = self.ao_app.audio.getdevices()
-        except Exception:
+            print("Devices:", devices)
+        except Exception as e:
+            print("getdevices failed:", e)
             devices = []
         for d in devices:
             if isinstance(d, (list, tuple)) and len(d) >= 2:
@@ -292,15 +293,125 @@ class Options(QtWidgets.QWidget):
         ao_app.installEventFilter(self)
         self.hide()
 
-    def change_bind(self):
-        pass
+    def showSettings(self):
+        self.show()
+
+        if os.path.exists("re-aio.ini"):
+            self.inifile.read("re-aio.ini")
+
+            self.defaultoocname_textbox.setText(self.inifile.get("General", "default_ooc_name", fallback=""))
+            self.defaultshowname_textbox.setText(self.inifile.get("General", "default_show_name", fallback=""))
+
+            selected_theme = self.inifile.get("Theme", "current_theme", fallback="default")
+            for i, (theme, item) in enumerate(self.themes):
+                if theme == selected_theme:
+                    self.themeview.setCurrentRow(i)
+                    break
+
+            self.ms_lineedit.setText(self.inifile.get("Advanced", "master_server", fallback=""))
+            self.fps_checkbox.setChecked(self.inifile.getboolean("Advanced", "60fps", fallback=True))
+
+            idx = self.inifile.getint("Audio", "device_index", fallback=0)
+            idx = max(0, min(idx, self.device_list.count() - 1))
+            self.device_list.setCurrentIndex(idx)
+
+            self.sound_slider.setValue(self.inifile.getint("Audio", "sfx_volume", fallback=100))
+            self.music_slider.setValue(self.inifile.getint("Audio", "music_volume", fallback=100))
+            self.blips_slider.setValue(self.inifile.getint("Audio", "blip_volume", fallback=100))
+
+            self.up_buttons[0].setText(getControlName(self.ao_app.controls["up"][0]))
+            self.up_buttons[1].setText(getControlName(self.ao_app.controls["up"][1]))
+            self.down_buttons[0].setText(getControlName(self.ao_app.controls["down"][0]))
+            self.down_buttons[1].setText(getControlName(self.ao_app.controls["down"][1]))
+            self.left_buttons[0].setText(getControlName(self.ao_app.controls["left"][0]))
+            self.left_buttons[1].setText(getControlName(self.ao_app.controls["left"][1]))
+            self.right_buttons[0].setText(getControlName(self.ao_app.controls["right"][0]))
+            self.right_buttons[1].setText(getControlName(self.ao_app.controls["right"][1]))
+            self.run_button.setText(getControlName(self.ao_app.controls["run"][0]))
+
+        else:
+            self.defaultoocname_textbox.setText("")
+            self.defaultshowname_textbox.setText("")
+            self.themeview.setCurrentRow(0)
+            self.ms_lineedit.setText("")
+            self.fps_checkbox.setChecked(True)
+            self.device_list.setCurrentIndex(0)
+            self.sound_slider.setValue(100)
+            self.music_slider.setValue(100)
+            self.blips_slider.setValue(100)
+
+            self.up_buttons[0].setText(getControlName(self.ao_app.controls["up"][0], fallback=QtCore.Qt.Key_W))
+            self.up_buttons[1].setText(getControlName(self.ao_app.controls["up"][1], fallback=QtCore.Qt.Key_Up))
+            self.down_buttons[0].setText(getControlName(self.ao_app.controls["down"][0], fallback=QtCore.Qt.Key_S))
+            self.down_buttons[1].setText(getControlName(self.ao_app.controls["down"][1], fallback=QtCore.Qt.Key_Down))
+            self.left_buttons[0].setText(getControlName(self.ao_app.controls["left"][0], fallback=QtCore.Qt.Key_A))
+            self.left_buttons[1].setText(getControlName(self.ao_app.controls["left"][1], fallback=QtCore.Qt.Key_Left))
+            self.right_buttons[0].setText(getControlName(self.ao_app.controls["right"][0], fallback=QtCore.Qt.Key_D))
+            self.right_buttons[1].setText(getControlName(self.ao_app.controls["right"][1], fallback=QtCore.Qt.Key_Right))
+            self.run_button.setText(getControlName(self.ao_app.controls["run"][0], fallback=QtCore.Qt.Key_Shift))
+
+        self.tabs.setCurrentIndex(0)
+        self.show()
+
+    def change_bind(self, button, action, idx=0):
+        if self.changing_bind:
+            self.changing_bind[0].setText(getControlName(self.ao_app.controls[self.changing_bind[1]][self.changing_bind[2]]))
+
+        self.changing_bind = [button, action, idx]
+        button.setText("Press any key or Esc to cancel")
 
     def on_save_click(self):
-        pass
+        if not os.path.exists("re-aio.ini"):
+            with open("re-aio.ini", "w", encoding="utf-8") as f:
+                f.write("")
+
+        self.inifile.read("re-aio.ini", encoding="utf-8")
+
+        if not self.inifile.has_section("General"):
+            self.inifile.add_section("General")
+        self.inifile.set("General", "default_ooc_name", self.defaultoocname_textbox.text())
+        self.inifile.set("General", "default_show_name", self.defaultshowname_textbox.text())
+
+        if not self.inifile.has_section("Theme"):
+            self.inifile.add_section("Theme")
+        current_theme = "default"
+
+        if self.themeview.currentRow() >= 0 and self.themeview.currentRow() < len(self.themes):
+            current_theme = self.themes[self.themeview.currentRow()][0]
+        self.inifile.set("Theme", "current_theme", current_theme)
+
+        if not self.inifile.has_section("Controls"):
+            self.inifile.add_section("Controls")
+        for i in range(len(self.ao_app.controls["up"])):
+            self.inifile.set("Controls", f"up{i+1}", str(self.ao_app.controls["up"][i]))
+        for i in range(len(self.ao_app.controls["down"])):
+            self.inifile.set("Controls", f"down{i+1}", str(self.ao_app.controls["down"][i]))
+        for i in range(len(self.ao_app.controls["left"])):
+            self.inifile.set("Controls", f"left{i+1}", str(self.ao_app.controls["left"][i]))
+        for i in range(len(self.ao_app.controls["right"])):
+            self.inifile.set("Controls", f"right{i+1}", str(self.ao_app.controls["right"][i]))
+        self.inifile.set("Controls", "run", str(self.ao_app.controls["run"][0]))
+
+        if not self.inifile.has_section("Audio"):
+            self.inifile.add_section("Audio")
+        self.inifile.set("Audio", "device_index", str(self.device_list.currentIndex()))
+        self.inifile.set("Audio", "sfx_volume", str(self.sound_slider.value()))
+        self.inifile.set("Audio", "music_volume", str(self.music_slider.value()))
+        self.inifile.set("Audio", "blip_volume", str(self.blips_slider.value()))
+
+        if not self.inifile.has_section("Advanced"):
+            self.inifile.add_section("Advanced")
+        self.inifile.set("Advanced", "master_server", self.ms_lineedit.text())
+        self.inifile.set("Advanced", "60fps", str(self.fps_checkbox.isChecked()))
+
+        with open("re-aio.ini", "w", encoding="utf-8") as f:
+            self.inifile.write(f)
+
+        self.fileSaved.emit()
+        self.hide()
 
     def on_cancel_click(self):
         self.hide()
-        pass
 
     def eventFilter(self, source, event):
         if self.tabs.currentIndex() == 2 and self.changing_bind and event.type() == QtCore.QEvent.KeyPress:
@@ -313,5 +424,11 @@ class Options(QtWidgets.QWidget):
             self.changing_bind = []
             return True
         return super(Options, self).eventFilter(source, event)
+    
+    def hide(self):
+        if self.changing_bind:
+            self.changing_bind[0].setText(getControlName(self.ao_app.controls[self.changing_bind[1]][self.changing_bind[2]]))
+            self.changing_bind = []
+        super(Options, self).hide()
 
 

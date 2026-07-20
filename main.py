@@ -1,7 +1,8 @@
 from application import Application
-import audio
+import audio 
 
+audio.init()
 app = Application()
-app.audio = audio
 
 app.exec()
+audio.free()

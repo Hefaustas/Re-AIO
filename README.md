@@ -1,6 +1,6 @@
 # Re: Attorney Investigations Online
 
-Re:AIO is a reimplementation of the [original Attorney Investigations Online client](https://github.com/headshot2017/AIO#), with added features and bug fixes.
+Re:AIO is WIP a reimplementation of the [original Attorney Investigations Online client](https://github.com/headshot2017/AIO#), with added features and bug fixes.
 
 [Attorney Investigations Online](https://aai-online.github.io/help/) is an online multiplayer version of the Capcom spin-off series "Ace Attorney Investigations: Miles Edgeworth".
 
@@ -14,17 +14,18 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
     - [x] Project scaffolding (Build the basic structure of the project)
         - [x] Wire Application to MainWindow, use stacked widgets
         - [x] Decide on Python 3 libraries 
-    - [ ] Port the complete UI (pre-join) from PyQt4 to PySide6
+    - [x] Port the complete UI (pre-join) from PyQt4 to PySide6
         - [x] Lobby
-        - [ ] Settings
+        - [x] Settings
         - [ ] About
-        - [ ] News
-        - [ ] Join IP dialog
-        - [ ] Favorites list
-    - [x] Audio backend (BASS)      
-    - [ ] Functional settings dialog (with saving to config file)
+        - [-] ~~News~~ scrapped (I don't think anyone reads this.)
+        - [x] Join IP dialog
+        - [-] Favorites list (The UI is there but not functional)
+    - [x] Audio backend (BASS)
+        - [-] BassOPUS needs to be figured out.      
+    - [x] Functional settings dialog (with saving to config file)
         - [x] Settings UI
-        - [ ] Rendering and saving settings from config
+        - [x] Rendering and saving settings from config
     - [ ] Lobby UI and connect flow
 - [ ] Networking and gameplay foundation
     - [ ] In-game UI (?)
@@ -58,6 +59,8 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
 - [ ] Advanced
     - [ ] Clean up code?
     - [ ] Close-up chat
+    - [ ] Finalise unreleasd 0.5 features (.ini offsets, shadows, etc.)
+    - [ ] add ability to pick spin.gif (similar to run adn walk anim)
 
 I'm not too sure how feasible some of these are, nor where they should actually be placed but it's a start.
     
