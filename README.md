@@ -17,12 +17,12 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
     - [x] Port the complete UI (pre-join) from PyQt4 to PySide6
         - [x] Lobby
         - [x] Settings
-        - [ ] About
-        - [-] ~~News~~ scrapped (I don't think anyone reads this.)
+        - [ ] ~~About~~ (On first release)
+        - [ ] ~~News~~ scrapped (I don't think anyone reads this.)
         - [x] Join IP dialog
-        - [-] Favorites list (The UI is there but not functional)
-    - [x] Audio backend (BASS)
-        - [-] BassOPUS needs to be figured out.      
+        - [x]* Favorites list (The UI is there but not functional)
+    - [x]* Audio backend (BASS)
+        - [ ] BassOPUS needs to be figured out.      
     - [x] Functional settings dialog (with saving to config file)
         - [x] Settings UI
         - [x] Rendering and saving settings from config
