@@ -20,8 +20,8 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
         - [ ] ~~About~~ (On first release)
         - [ ] ~~News~~ scrapped (I don't think anyone reads this.)
         - [x] Join IP dialog
-        - [x]* Favorites list (The UI is there but not functional)
-    - [x]* Audio backend (BASS)
+        - [x] * Favorites list (The UI is there but not functional)
+    - [x] * Audio backend (BASS)
         - [ ] BassOPUS needs to be figured out.      
     - [x] Functional settings dialog (with saving to config file)
         - [x] Settings UI
