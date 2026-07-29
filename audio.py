@@ -1,6 +1,7 @@
 # platform-dependent audio handling using BASS, basically stolen from the old AIO
 # modified to use pybass3 for 64-bit compatibility
 
+# TODO: I think the current implemention of audio is probably broken and will need to be redone from the ground up.
 import platform, ctypes, os
 from pybass_constants import *
 from configparser import ConfigParser
