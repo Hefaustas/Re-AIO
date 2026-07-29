@@ -45,6 +45,10 @@ class lobby(QtWidgets.QWidget):
 
         self.fix_headers(self.ui)
 
+        # sorts by players on boot
+        # TODO: make it sort by player count only not by sum of player count and max players
+        self.ui.publicServerList.sortByColumn(1, Qt.SortOrder.AscendingOrder)
+
         self.ui.publicServerList.itemSelectionChanged.connect(self.on_selection_changed)
         self.ui.favoritesServerList.itemSelectionChanged.connect(self.on_selection_changed)
 
