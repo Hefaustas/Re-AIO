@@ -8,6 +8,8 @@ This is written in Python 3.10+
 
 Instead of PyQt4, this project utilizes PySide6 for the GUI.
 
+Run quicksetup.py to download necessary repositories. 
+
 ### Roadmap
 
 - [ ] First (easy?) features
