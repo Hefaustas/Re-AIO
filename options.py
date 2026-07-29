@@ -271,11 +271,17 @@ class Options(QtWidgets.QWidget):
 
         ms_layout.addWidget(ms_label)
         ms_layout.addWidget(self.ms_lineedit)
+        advanced_layout.addLayout(ms_layout)
+
+
+        # (legacy mode)
+        self.mstype_checkbox = QtWidgets.QCheckBox("Legacy mode")
+        self.mstype_checkbox.setToolTip("Enable to connect to legacy masterserver. Restart required.")
+        advanced_layout.addWidget(self.mstype_checkbox)
+
 
         self.fps_checkbox = QtWidgets.QCheckBox("60 FPS mode", self)
-
-        advanced_layout.addLayout(ms_layout)
-        advanced_layout.addWidget(separators[1])
+        advanced_layout.addWidget(separators[0])
         advanced_layout.addWidget(self.fps_checkbox)
 
 
@@ -309,6 +315,7 @@ class Options(QtWidgets.QWidget):
                     break
 
             self.ms_lineedit.setText(self.inifile.get("Advanced", "master_server", fallback=""))
+            self.mstype_checkbox.setChecked(self.inifile.getboolean("Advanced", "ms_type", fallback=True))
             self.fps_checkbox.setChecked(self.inifile.getboolean("Advanced", "60fps", fallback=True))
 
             idx = self.inifile.getint("Audio", "device_index", fallback=0)
@@ -334,21 +341,22 @@ class Options(QtWidgets.QWidget):
             self.defaultshowname_textbox.setText("")
             self.themeview.setCurrentRow(0)
             self.ms_lineedit.setText("")
+            self.mstype_checkbox.setChecked(True)
             self.fps_checkbox.setChecked(True)
             self.device_list.setCurrentIndex(0)
             self.sound_slider.setValue(100)
             self.music_slider.setValue(100)
             self.blips_slider.setValue(100)
 
-            self.up_buttons[0].setText(getControlName(self.ao_app.controls["up"][0], fallback=QtCore.Qt.Key_W))
-            self.up_buttons[1].setText(getControlName(self.ao_app.controls["up"][1], fallback=QtCore.Qt.Key_Up))
-            self.down_buttons[0].setText(getControlName(self.ao_app.controls["down"][0], fallback=QtCore.Qt.Key_S))
-            self.down_buttons[1].setText(getControlName(self.ao_app.controls["down"][1], fallback=QtCore.Qt.Key_Down))
-            self.left_buttons[0].setText(getControlName(self.ao_app.controls["left"][0], fallback=QtCore.Qt.Key_A))
-            self.left_buttons[1].setText(getControlName(self.ao_app.controls["left"][1], fallback=QtCore.Qt.Key_Left))
-            self.right_buttons[0].setText(getControlName(self.ao_app.controls["right"][0], fallback=QtCore.Qt.Key_D))
-            self.right_buttons[1].setText(getControlName(self.ao_app.controls["right"][1], fallback=QtCore.Qt.Key_Right))
-            self.run_button.setText(getControlName(self.ao_app.controls["run"][0], fallback=QtCore.Qt.Key_Shift))
+            self.up_buttons[0].setText(getControlName(QtCore.Qt.Key_W))
+            self.up_buttons[1].setText(getControlName(QtCore.Qt.Key_Up))
+            self.down_buttons[0].setText(getControlName(QtCore.Qt.Key_S))
+            self.down_buttons[1].setText(getControlName(QtCore.Qt.Key_Down))
+            self.left_buttons[0].setText(getControlName(QtCore.Qt.Key_A))
+            self.left_buttons[1].setText(getControlName(QtCore.Qt.Key_Left))
+            self.right_buttons[0].setText(getControlName(QtCore.Qt.Key_D))
+            self.right_buttons[1].setText(getControlName(QtCore.Qt.Key_Right))
+            self.run_button.setText(getControlName(QtCore.Qt.Key_Shift))
 
         self.tabs.setCurrentIndex(0)
         self.show()
@@ -402,6 +410,7 @@ class Options(QtWidgets.QWidget):
         if not self.inifile.has_section("Advanced"):
             self.inifile.add_section("Advanced")
         self.inifile.set("Advanced", "master_server", self.ms_lineedit.text())
+        self.inifile.set("Advanced", "ms_type", str(self.mstype_checkbox.isChecked()))
         self.inifile.set("Advanced", "60fps", str(self.fps_checkbox.isChecked()))
 
         with open("re-aio.ini", "w", encoding="utf-8") as f:

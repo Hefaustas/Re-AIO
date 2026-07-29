@@ -27,7 +27,7 @@ Returns string with dll name if it's missing, empty if all DLLs are in place
     one = os.path.exists(os.path.abspath(dllf))
     two = os.path.exists(os.path.abspath(opus))
     if not one: return dllf
-    if not two: return two
+    if not two: return opus
     return ""
 
 def init(freq=48000):
@@ -47,10 +47,10 @@ Initialize BASS and the opus plugin
     config.read("re-aio.ini")
 
     if use_pybass3:
-        dll.bass_module.BASS_Init(config.getint("Audio", "device", fallback=-1), freq, 0, 0, 0)
+        dll.bass_module.BASS_Init(config.getint("Audio", "device_index", fallback=-1), freq, 0, 0, 0)
         #dll.bass_stream.BASS_PluginLoad(os.path.abspath(opus), 0)
     else:    
-        dll.BASS_Init(config.getint("Audio", "device", fallback=-1), freq, 0, 0, 0)
+        dll.BASS_Init(config.getint("Audio", "device_index", fallback=-1), freq, 0, 0, 0)
         dll.BASS_PluginLoad(os.path.abspath(opus), 0)
     
 
@@ -64,15 +64,30 @@ def getcurrdevice():
     return dll.BASS_GetDevice()
 
 def getdevices():
-    """
-Get BASS devices
-    """
-    info = BASS_DEVICEINFO() if use_ctypes else dll.BASS_DEVICEINFO()
-    i = 0
     devices = []
-    while dll.BASS_GetDeviceInfo(i, ctypes.c_voidp(ctypes.addressof(info)) if use_ctypes else info):
-        devices.append(i, info.name)
+    i = 0
+    info = BASS_DEVICEINFO()
+
+    if use_pybass3:
+        bass_api = dll.bass_module
+        while bass_api.BASS_GetDeviceInfo(i, ctypes.byref(info)):
+            name = info.name.decode("utf-8", errors="replace") if isinstance(info.name, bytes) else str(info.name)
+            devices.append((i, name))
+            i += 1
+        return devices
+
+    if use_ctypes:
+        while dll.BASS_GetDeviceInfo(i, ctypes.byref(info)):
+            name = info.name.decode("utf-8", errors="replace") if isinstance(info.name, bytes) else str(info.name)
+            devices.append((i, name))
+            i += 1
+        return devices
+
+    while dll.BASS_GetDeviceInfo(i, info):
+        name = info.name.decode("utf-8", errors="replace") if isinstance(info.name, bytes) else str(info.name)
+        devices.append((i, name))
         i += 1
+
     return devices
 
 def loadhandle(mem, file, offset=0, length=0, flags=0):

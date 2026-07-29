@@ -30,16 +30,17 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
 - [ ] Networking and gameplay foundation
     - [ ] In-game UI (?)
     - [ ] Implement UDP client thread and master server query
-    - [ ] Server list and joining
+    - [X] Server list
+    - [ ] Joining
     - [ ] In-game chat
     - [ ] Favorites management
     - [ ] News functionality
-    - [ ] Multiplayer protocol
+    - [X] Multiplayer protocol
     - [ ] Server/Client communication
     - [ ] Asset loading
     - [ ] Basic server
     - [ ] Ability to join games
-    - [ ] Master server
+    - [X] Masterserver query
 - [ ] Gameplay
     - [ ] Finish in-game UI
     - [ ] Viewport rendering
@@ -54,6 +55,7 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
     - [ ] Server configuration
     - [ ] Server commands?
         - [ ] Player management (kicking, banning, muting)
+        - [ ] CM system, bg changing, etc.
     - [ ] IC, OOC chat handling
     - [ ] Modpass
 - [ ] Advanced
@@ -61,6 +63,7 @@ Instead of PyQt4, this project utilizes PySide6 for the GUI.
     - [ ] Close-up chat
     - [ ] Finalise unreleasd 0.5 features (.ini offsets, shadows, etc.)
     - [ ] add ability to pick spin.gif (similar to run adn walk anim)
+    - [ ] make music different per zone, not serverwide
 
 I'm not too sure how feasible some of these are, nor where they should actually be placed but it's a start.
     
