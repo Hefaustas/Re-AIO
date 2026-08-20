@@ -27,6 +27,7 @@ Run quicksetup.py to download necessary repositories.
         - [ ] BassOPUS needs to be figured out.      
     - [x] Functional settings dialog (with saving to config file)
         - [x] Settings UI
+            - [ ] Modernize settings, make accesible in-game
         - [x] Rendering and saving settings from config
     - [ ] Lobby UI and connect flow
 - [ ] Networking and gameplay foundation
