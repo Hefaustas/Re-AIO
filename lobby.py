@@ -111,7 +111,7 @@ class lobby(QtWidgets.QWidget):
         self.server_name_label = QtWidgets.QLabel("", self.ui.serverName)
         self.server_name_label.setGeometry(6, 2, self.ui.serverName.width() - 12, self.ui.serverName.height() - 4)
         self.server_name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.server_playercount_label = QtWidgets.QLabel("Players: 0/0", self.ui.serverPlayercount)
+        self.server_playercount_label = QtWidgets.QLabel("", self.ui.serverPlayercount)
         self.server_playercount_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.server_playercount_label.setGeometry(6, 2, self.ui.serverPlayercount.width() - 12, self.ui.serverPlayercount.height() - 4)
         self.server_description_label = QtWidgets.QLabel("", self.ui.serverDescription)
@@ -127,7 +127,7 @@ class lobby(QtWidgets.QWidget):
     def _update_server_info(self, server):
         if not server:
             self.server_name_label.setText("")
-            self.server_playercount_label.setText("Players: 0/0")
+            self.server_playercount_label.setText("")
             self.server_description_label.setText("")
             return
         clean_name, player_count, player_max = self._format_server_info(
