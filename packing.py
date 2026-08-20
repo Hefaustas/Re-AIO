@@ -2,49 +2,72 @@ import struct
 import zlib
 
 
-#mostly stolen, but tried cleaning some things up
 def buffer_read(format, data):
-    unpacked = struct.unpack_from(format, data)[0]
+    unpacked = struct.unpack_from(format, data)
     size = struct.calcsize(format)
-    return data[size:], unpacked
+    return data[size:], unpacked[0]  # [size:] means skip ahead size amount of bytes
+
+
+def readAIOHeader(data):
+    if isinstance(data, str):
+        data = data.encode("latin1")
+    packetsize, = struct.unpack("I", data[:3] + b"\x00")  # read first 3 bytes. this is the packet size
+    compression = data[3]  # the last byte is the compression type. 0=none, 1=zlib
+    return packetsize, compression  # after that you do tcp.recv(packetsize) and check if decompression is needed
+
 
 def readAIOheader(data):
-    packet_size = struct.unpack("<I", data[:3] + b"\x00")[0]
-    compression = data[3]
-    return packet_size, compression
+    return readAIOHeader(data)
 
-def makeAIOpacket(data, compression=0):
+
+def makeAIOPacket(data, compression=0):
+    if isinstance(data, str):
+        data = data.encode("utf-8")
     if compression == 1:
         data = zlib.compress(data)
-    finaldata = struct.pack("<I", len(data))[:3]
-    finaldata += struct.pack("B", compression)
+    finaldata = struct.pack("I", len(data))[:3]  # strip the 4th byte off of it
+    finaldata += struct.pack("B", compression)  # compression type
     return finaldata + data
 
+
+def makeAIOpacket(data, compression=0):
+    return makeAIOPacket(data, compression)
+
+
 def packString8(string):
-    if isinstance(string, str):
-        string = string.encode("utf-8")
-    string = string[:255]
-    return struct.pack(f"B{len(string)}s", len(string), string)
+    if isinstance(string, bytes):
+        string = string.decode("utf-8", errors="ignore")
+    string = str(string)[:255]
+    encoded = string.encode("utf-8")
+    l = len(encoded)
+    buf = struct.pack("B%ds" % l, l, encoded)
+    return buf
+
 
 def packString16(string):
-    if isinstance(string, str):
-        string = string.encode("utf-8")
-    string = string[:65535]
-    return struct.pack(f"H{len(string)}s", len(string), string)
+    if isinstance(string, bytes):
+        string = string.decode("utf-8", errors="ignore")
+    string = str(string)[:65535]
+    encoded = string.encode("utf-8")
+    l = len(encoded)
+    buf = struct.pack("H%ds" % l, l, encoded)
+    return buf
+
 
 def unpackString8(data):
-    length = struct.unpack_from("B", data)[0]
-    start = 1
-    end = start + length
-    string = data[start:end].decode("utf-8")
-    return data[end:], string
+    l, = struct.unpack_from("B", data)
+    string, = struct.unpack_from("%ds" % l, data[1:])
+    if isinstance(string, bytes):
+        string = string.decode("utf-8", errors="ignore")
+    return data[struct.calcsize("B%ds" % l):], string[:l]
+
 
 def unpackString16(data):
-    length = struct.unpack_from("H", data)[0]
-    start = 2
-    end = start + length
-    string = data[start:end].decode("utf-8")
-    return data[end:], string
+    l, = struct.unpack_from("H", data)
+    string, = struct.unpack_from("%ds" % l, data[2:])
+    if isinstance(string, bytes):
+        string = string.decode("utf-8", errors="ignore")
+    return data[struct.calcsize("H%ds" % l):], string[:l]
 
 def versionToInt(version):
     parts = version.split(".")
