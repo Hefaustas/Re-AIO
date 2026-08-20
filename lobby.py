@@ -65,6 +65,11 @@ class lobby(QtWidgets.QWidget):
         legacy_mode = (ms_type == True)
         self.legacy_mode = legacy_mode
 
+        if hasattr(self.ui, "connectButton"):
+            if legacy_mode == True:
+                self.ui.connectButton.setEnabled(False)
+                self.ui.connectButton.setToolTip("Connecting to legacy servers is not supported on Re-AIO.")
+
         parts = ms_value.split(":", 1)
         ip = parts[0]
         port = int(parts[1]) if len(parts) > 1 else 27011
